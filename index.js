@@ -1,3 +1,4 @@
+// Untuk dotenv, apabila dipanggil di index paling luar, maka variabel yang sudah disimpan di file .env bisa langsung digunakan disemua file, namun tidak bisa di tampilkan variabelnya di console.log (walaupun tidak bisa ditampilkan namun tetap berjalan ketika di run)
 require('dotenv').config();
 
 const { urlencoded, json } = require("express");

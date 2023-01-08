@@ -28,7 +28,12 @@ const authController = {
             } else {
                 const request = {
                     email: req.body.email,
-                    password: hash
+                    password: hash,
+                    mobile_number: req.body.mobile_number,
+                    name: req.body.name,
+                    gender: req.body.gender,
+                    birthdate: req.body.birthdate,
+                    address: req.body.address,
                 }
                 return authModel.register(request)
                     .then((result) => {

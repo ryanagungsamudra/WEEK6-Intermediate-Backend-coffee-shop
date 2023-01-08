@@ -1,3 +1,4 @@
+// express validator
 const { check, validationResult } = require('express-validator')
 
 // PRODUCT
@@ -42,7 +43,7 @@ const { check, validationResult } = require('express-validator')
 
 // PRODUCT DETAIL/ORDER
     // RULES
-    const rulesProductDetail = [
+    const rulesOrder = [
         check('title')
             .notEmpty().withMessage('The title of product cannot empty')
             .trim()
@@ -85,9 +86,9 @@ const { check, validationResult } = require('express-validator')
             .escape(),
     ]
     // RESPONSE AND CONDITION
-    const productDetail = [
+    const order = [
         //Rules
-        rulesProductDetail,
+        rulesOrder,
 
         //Response
         (req, res, next) => {
@@ -110,7 +111,6 @@ const { check, validationResult } = require('express-validator')
 
         check('password')
             .notEmpty().withMessage('password cannot empty')
-            .isNumeric().withMessage('password must be a numeric')
             .trim()
             .escape(),
 
@@ -156,6 +156,6 @@ const { check, validationResult } = require('express-validator')
         }
     ]
 
-module.exports = {product, productDetail, users}
+module.exports = {product, order, users}
 
 

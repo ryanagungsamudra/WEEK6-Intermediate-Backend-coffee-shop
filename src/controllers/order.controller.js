@@ -1,4 +1,4 @@
-const productDetailModel = require("../model/product-detail.model")
+const productDetailModel = require("../model/order.model")
 const { Pagination, formResponse } = require("../../helper")
 
 const productDetailController = {
