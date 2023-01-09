@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express();
+// JWT and validation
 const verifyToken = require('../middlewares/verifyToken')
 const validation = require('../middlewares/validation')
 

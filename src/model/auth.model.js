@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 
 const authModel = {
     login: ({ email, password }) => {
-        console.log(email, password)
         return new Promise((resolve, reject) => {
             db.query(`SELECT * FROM users WHERE email=$1`, [email], (err, result) => {
                 //username = unique||email = unique

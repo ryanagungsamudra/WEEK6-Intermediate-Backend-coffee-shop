@@ -1,4 +1,4 @@
-require('dotenv').config({path: '../.env'})
+// require('dotenv').config({path: '../.env'})
 const { Client } = require('pg')
 const { DB_USERNAME, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT } = process.env
 
