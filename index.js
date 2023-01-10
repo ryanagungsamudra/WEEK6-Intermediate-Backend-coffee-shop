@@ -7,6 +7,8 @@ const app = express();
 const cors = require('cors');
 const router = require('./src/routes/index');
 
+// static express for static image folder
+app.use(express.static('public'))
 // menerima application/x-www-form-urlencoded
 app.use(urlencoded({ extended: true }));
 // menerima json

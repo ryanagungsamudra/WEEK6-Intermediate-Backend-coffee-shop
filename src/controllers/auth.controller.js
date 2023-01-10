@@ -8,13 +8,7 @@ const authController = {
     login: (req, res) => {
         return authModel.login(req.body)
             .then((result) => {
-                // console.log({ id: result.id, role: result.role });
-                jwt.sign({ id: result.id, role: result.role },JWT_PRIVATE_KEY, (err, token) => {
-                    // if (err){
-                    //     return res.status(400).send({
-                    //         message: err
-                    //     })
-                    // }
+                jwt.sign({ id: result.id, role: result.role }, JWT_PRIVATE_KEY, (err, token) => {
                     return res.status(200).send({
                         message: "success", data: {
                             token,

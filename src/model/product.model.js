@@ -4,15 +4,18 @@ const { v4: uuidv4 } = require('uuid');
 
 const productModel = {
     // CREATE
-    create: ({ title, img, price, category }) => {
+    create: ({ title, price, category, file }) => {
         return new Promise((resolve, reject) => {
             db.query(
-                `INSERT INTO products (id, title, img, price, category) VALUES ('${uuidv4()}','${title}','${img}','${price}','${category}')`,
+                `INSERT INTO products (id, title, price, category) VALUES ('${uuidv4()}','${title}','${price}','${category}') RETURNING id`,
                 (err, result) => {
                     if (err) {
                         return reject(err.message)
                     } else {
-                        return resolve({ title, img, price, category })
+                        for (let index = 0; index < file.length; index++) {
+                            db.query(`INSERT INTO products_images (id_image, id_product, name, filename) VALUES($1, $2 ,$3 , $4)`, [uuidv4(), result.rows[0].id, title, file[index].filename])
+                        }
+                        return resolve({ title, price, category, images: file })
                     }
                 }
             )

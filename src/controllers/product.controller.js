@@ -3,7 +3,14 @@ const { Pagination, formResponse } = require("../../helper")
 
 const productController = {
     create: (req, res) => {
-        return productModel.create(req.body)
+        const request = {
+            ...req.body,
+            file: req.files, //uncomment if multiple
+
+            // img: req.file.filename, //uncomment if single
+            //depend on product.route, formUpload.single or formUpload.array
+        }
+        return productModel.create(request)
             .then((result) => {
                 return formResponse(201, "success", result, res)
             }).catch((error) => {
