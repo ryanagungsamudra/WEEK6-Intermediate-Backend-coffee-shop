@@ -9,10 +9,10 @@ const { check, validationResult } = require('express-validator')
             .trim()
             .escape(),
 
-        check('img')
-            .notEmpty().withMessage('The image of product cannot empty')
-            .trim()
-            .escape(),
+        // check('img')
+        //     .notEmpty().withMessage('The image of product cannot empty')
+        //     .trim()
+        //     .escape(),
 
         check('category')
             .notEmpty().withMessage('The category of product cannot empty')

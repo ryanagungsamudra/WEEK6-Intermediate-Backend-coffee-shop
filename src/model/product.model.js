@@ -40,7 +40,13 @@ const productModel = {
     read: function (search, category, sortBy = 'ASC', limit = 25, offset = 0) {
         return new Promise((resolve, reject) => {
             db.query(
-                `SELECT * from products ${this.query(search, category, sortBy, limit, offset)}`,
+                `SELECT 
+                  products.id, products.title, products.price, products.category,  
+                  json_agg(row_to_json(products_images)) images 
+                FROM products 
+                INNER JOIN products_images ON products.id=products_images.id_product
+                GROUP BY products.id ${this.query(search, category, sortBy, limit, offset)}`,
+                // `SELECT * from products ${this.query(search, category, sortBy, limit, offset)}`,
                 (err, result) => {
                     if (err) {
                         return reject(err.message)
