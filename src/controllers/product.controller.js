@@ -19,13 +19,16 @@ const productController = {
             })
     },
     read: (req, res) => {
+        // console.log(req.query);
         let { search, category, sortBy, page, limit } = req.query
         let offset = Pagination.buildOffset(page, limit)
         return productModel.read(search, category, sortBy, limit, offset)
             .then((result) => {
-                return formResponse(200, "success", result, res)
+                return res.status(201).send({ message: "succes", data: result })
+                // return formResponse(200, "success", result, res)
             }).catch((error) => {
-                return formResponse(500, error)
+                return res.status(500).send({ message: error })
+                // return formResponse(500, error)
             })
     },
     readDetail: (req, res) => {
@@ -49,13 +52,7 @@ const productController = {
         }
         return productModel.update(request)
             .then((result) => {
-                // for (let i = 0; i < result.oldImages.length; i++) {
-                //     console.log(result.oldImages[i].filename)
-                //     unlink(`public/uploads/images/${result.oldImages[i].filename}`, (err) => {
-                //         // if (err) throw err;
-                //         console.log(`successfully deleted ${result.oldImages[i].filename}`);
-                //     });
-                // }
+                
                 return res.status(201).send({ message: "succes", data: result })
                 // return formResponse(201, "success", result, res)
             }).catch((error) => {
