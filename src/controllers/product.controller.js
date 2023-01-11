@@ -52,7 +52,15 @@ const productController = {
         }
         return productModel.update(request)
             .then((result) => {
-                
+                if (typeof result.oldImages != "undefined") {
+                    for (let index = 0; index < result.oldImages.length; index++) {
+                        console.log(result.oldImages[index].filename)
+                        unlink(`public/uploads/images/${result.oldImages[index].filename}`, (err) => {
+                            // if (err) throw err;
+                            console.log(`successfully deleted ${result.oldImages[index].filename}`);
+                        });
+                    }
+                }
                 return res.status(201).send({ message: "succes", data: result })
                 // return formResponse(201, "success", result, res)
             }).catch((error) => {

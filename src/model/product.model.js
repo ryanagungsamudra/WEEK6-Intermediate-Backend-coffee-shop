@@ -93,7 +93,7 @@ const productModel = {
     },
 
     // UPDATE
-    update: ({ id, title, img, price, category }) => {
+    update: ({ id, title, img, price, category, file }) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT * FROM products WHERE id='${id}'`, (err, result) => {
                 if (err) {
@@ -105,20 +105,19 @@ const productModel = {
                             if (err) {
                                 return reject(err.message)
                             } else {
-                                // if (typeof file == "undefined") return resolve({ id, title, price, category })
-                                // db.query(`SELECT id_image, filename FROM products_images WHERE id_product='${id}'`, (errOld, resultOld) => {
-                                //     if (errOld) return reject({ message: errOld.message })
+                                if (file.length <= 0) return resolve({ id, title, price, category })
 
-                                //     for (let indexOld = 0; indexOld < resultOld.rowCount; indexOld++) {
-                                //         for (let indexNew = 0; indexNew < file.length; indexNew++) {
-                                //             db.query(`UPDATE products_images SET filename=$1 WHERE id_image=$2`, [file[indexNew].filename, resultOld[indexOld].id_image], (err, result) => {
-                                //                 if (err) return reject({ message: "Failed to remove image!" })
-                                //                 return resolve({ id, title, price, category, oldImages: resultOld.rows, images: file })
-                                //             })
-                                //         }
-                                //     }
-                                // })
-                                return resolve({ id, title, img, price, category })
+                                db.query(`SELECT id_image, filename FROM products_images WHERE id_product='${id}'`, (errProductImages, productImages) => {
+                                    if (errProductImages) return reject({ message: errProductImages.message })
+
+                                    for (let indexNew = 0; indexNew < file.length; indexNew++) {
+                                        db.query(`UPDATE products_images SET filename=$1 WHERE id_image=$2`, [file[indexNew].filename, productImages.rows[indexNew].id_image], (err, result) => {
+                                            if (err) return reject({ message: "Failed delete image!" })
+                                            return resolve({ id, title, price, category, oldImages: productImages.rows, images: file })
+                                        })
+                                    }
+                                })
+                                // return resolve({ id, title, img, price, category })
                             }
                         }
                     )
@@ -145,60 +144,6 @@ const productModel = {
                     }
                 }
             )
-        })
-    },
-    updatetest: ({ id, title, img, price, category, file }) => {
-        return new Promise((resolve, reject) => {
-            db.query(`SELECT * FROM products WHERE id='${id}'`, (err, result) => {
-                if (err) {
-                    return reject(err.message)
-                } else {
-                    // result.rows[0]
-                    // const dataUpdate = [result.rows[0].title, result.rows[0].img, result.rows[0].price, result.rows[0].category]
-                    db.query(
-                        `UPDATE products SET title='${title || result.rows[0].title}', img='${img || result.rows[0].img}',price='${price || result.rows[0].price}', category='${category || result.rows[0].category}' WHERE id='${id}'`,
-                        (err, result) => {
-                            if (err) {
-                                return reject(err.message)
-                            } else {
-
-                                if (file.length <= 0) return resolve({ id, title, price, category })
-
-                                db.query(`SELECT id_image, filename FROM product_images WHERE id_product='${id}'`, (errProductImages, productImages) => {
-                                    if (errProductImages) return reject({ message: errProductImages.message })
-                                    // console.log(productImages)
-
-                                    //update image with upload = done ✅
-                                    // for (let indexOld = 0; indexOld < productImages.rowCount; indexOld++) {
-                                    //ketika file.length lebih dari data images dr database
-                                    // maka 1. bisa kita skip / message (fitur belum di suuport)
-                                    // maka 2. kita akan ganti update, jadi INSERT INTO
-                                    // 1-2 -> update
-                                    // 3 -> insert
-                                    // file.lengt = 5-3 = 2
-
-
-                                    for (let indexNew = 0; indexNew < file.length; indexNew++) {
-                                        db.query(`UPDATE product_images SET filename=$1 WHERE id_image=$2`, [file[indexNew].filename, productImages.rows[indexNew].id_image], (err, result) => {
-                                            if (err) return reject({ message: "image gagal dihapus" })
-                                            return resolve({ id, title, price, category, oldImages: productImages.rows, images: file })
-                                        })
-                                        // for (let sisaImage = 0; sisaImage < file.length-productImages.rowCount; sisaImage++) {
-                                        //   db.query(`INSERT INTO product_images VALUES(UUIDV4, idPORUCT)`,[file[indexNew].filename, productImages.rows[indexNew].id_image], (err, result)=> {
-                                        //     if(err) return reject({message: "image gagal dihapus"})
-                                        //     return resolve({id, title, price, category, oldImages: productImages.rows, images: file})
-                                        //   })
-                                        // }   
-
-                                    }
-                                    // }
-
-                                })
-                            }
-                        }
-                    );
-                }
-            })
         })
     },
 }
