@@ -1,5 +1,6 @@
 const productModel = require("../model/product.model")
 const { Pagination, formResponse } = require("../../helper")
+const { unlink } = require('node:fs')
 
 const productController = {
     create: (req, res) => {
@@ -43,21 +44,40 @@ const productController = {
     update: (req, res) => {
         const request = {
             ...req.body,
-            id: req.params.id
+            id: req.params.id,
+            file: req.files
         }
         return productModel.update(request)
             .then((result) => {
-                return formResponse(201, "success", result, res)
+                // for (let i = 0; i < result.oldImages.length; i++) {
+                //     console.log(result.oldImages[i].filename)
+                //     unlink(`public/uploads/images/${result.oldImages[i].filename}`, (err) => {
+                //         // if (err) throw err;
+                //         console.log(`successfully deleted ${result.oldImages[i].filename}`);
+                //     });
+                // }
+                return res.status(201).send({ message: "succes", data: result })
+                // return formResponse(201, "success", result, res)
             }).catch((error) => {
-                return formResponse(500, error)
+                return res.status(500).send({ message: error })
+                // return formResponse(500, error)
             })
     },
     remove: (req, res) => {
         return productModel.remove(req.params.id)
             .then((result) => {
-                return formResponse(200, "success", result, res)
+                // Looping untuk setiap index pada data result
+                for (let i = 0; i < result.length; i++) {
+                    unlink(`public/uploads/images/${result[i].filename}`, (err) => {
+                        if (err) throw err;
+                        // console.log(`Product has been deleted! ${result[i].filename}`);
+                    });
+                }
+                return res.status(201).send({ message: "succes deleted", data: result })
+                // return formResponse(201, "success", result, res)
             }).catch((error) => {
-                return formResponse(500, error)
+                return res.status(500).send({ message: error })
+                // return formResponse(500, error)
             })
     }
 }

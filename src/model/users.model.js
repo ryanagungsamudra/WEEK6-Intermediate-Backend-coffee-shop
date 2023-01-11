@@ -65,19 +65,19 @@ const usersModel = {
     },
 
     // UPDATE
-    update: ({ id, email, password, mobile_number, name, gender, birthdate, address }) => {
+    update: ({ id, email, password, mobile_number, name, gender, birthdate, address, role }) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT * FROM users WHERE id='${id}'`, (err, result) => {
                 if (err) {
                     return reject(err.message);
                 } else {
                     db.query(
-                        `UPDATE users SET name='${name || result.rows[0].name}', email='${email || result.rows[0].email}', password='${password || result.rows[0].password}', mobile_number='${mobile_number || result.rows[0].mobile_number}', gender='${gender || result.rows[0].gender}', birthdate='${birthdate || result.rows[0].birthdate}', address='${address || result.rows[0].address}' WHERE id='${id}'`,
+                        `UPDATE users SET name='${name || result.rows[0].name}', email='${email || result.rows[0].email}', password='${password || result.rows[0].password}', mobile_number='${mobile_number || result.rows[0].mobile_number}', gender='${gender || result.rows[0].gender}', birthdate='${birthdate || result.rows[0].birthdate}', address='${address || result.rows[0].address}', role='${role || result.rows[0].role}' WHERE id='${id}'`,
                         (err, result) => {
                             if (err) {
                                 return reject(err.message)
                             } else {
-                                return resolve({ id, email, password, mobile_number, name, gender, birthdate, address })
+                                return resolve({ id, email, password, mobile_number, name, gender, birthdate, address, role })
                             }
                         }
                     )

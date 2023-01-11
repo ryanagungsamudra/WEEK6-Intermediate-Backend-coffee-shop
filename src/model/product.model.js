@@ -86,6 +86,19 @@ readDetail: (id) => {
                             if (err) {
                                 return reject(err.message)
                             } else {
+                                // if (typeof file == "undefined") return resolve({ id, title, price, category })
+                                // db.query(`SELECT id_image, filename FROM products_images WHERE id_product='${id}'`, (errOld, resultOld) => {
+                                //     if (errOld) return reject({ message: errOld.message })
+
+                                //     for (let indexOld = 0; indexOld < resultOld.rowCount; indexOld++) {
+                                //         for (let indexNew = 0; indexNew < file.length; indexNew++) {
+                                //             db.query(`UPDATE products_images SET filename=$1 WHERE id_image=$2`, [file[indexNew].filename, resultOld[indexOld].id_image], (err, result) => {
+                                //                 if (err) return reject({ message: "Failed to remove image!" })
+                                //                 return resolve({ id, title, price, category, oldImages: resultOld.rows, images: file })
+                                //             })
+                                //         }
+                                //     }
+                                // })
                                 return resolve({ id, title, img, price, category })
                             }
                         }
@@ -105,7 +118,11 @@ readDetail: (id) => {
                         if (err) {
                             return reject(err.message)
                         } else {
-                            return resolve(`products ${id} has been deleted`)
+                            db.query(`DELETE FROM products_images WHERE id_product='${id}' RETURNING filename`, (err, result) => {
+                                if (err) return reject({ message: 'Failed to remove image!' })
+                                return resolve(result.rows)
+                            })
+                            // return resolve(`Products ${id} has been deleted`)
                         }
                     }
                 )
