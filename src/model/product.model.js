@@ -108,13 +108,19 @@ const productModel = {
                                 if (file.length <= 0) return resolve({ id, title, price, category })
 
                                 db.query(`SELECT id_image, filename FROM products_images WHERE id_product='${id}'`, (errProductImages, productImages) => {
-                                    if (errProductImages) return reject({ message: errProductImages.message })
+                                    // ERROR HANDLING
+                                    if (errProductImages) {
+                                        return reject({ message: errProductImages.message });
+                                    } else if (productImages.rows.length < file.length) {
+                                        return reject("sorry:(...for now you can only upload images according to the previous number or lower");
+                                    } else {
+                                        for (let indexNew = 0; indexNew < file.length; indexNew++) {
+                                            db.query(`UPDATE products_images SET filename=$1 WHERE id_image=$2`, [file[indexNew].filename, productImages.rows[indexNew].id_image], (err, result) => {
+                                                if (err) return reject({ message: "Failed delete image!" })
+                                                return resolve({ id, title, price, category, oldImages: productImages.rows, images: file })
 
-                                    for (let indexNew = 0; indexNew < file.length; indexNew++) {
-                                        db.query(`UPDATE products_images SET filename=$1 WHERE id_image=$2`, [file[indexNew].filename, productImages.rows[indexNew].id_image], (err, result) => {
-                                            if (err) return reject({ message: "Failed delete image!" })
-                                            return resolve({ id, title, price, category, oldImages: productImages.rows, images: file })
-                                        })
+                                            })
+                                        }
                                     }
                                 })
                                 // return resolve({ id, title, img, price, category })

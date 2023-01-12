@@ -120,25 +120,25 @@ const { check, validationResult } = require('express-validator')
             .trim()
             .escape(),
 
-        check('name')
-            .notEmpty().withMessage('name cannot empty')
-            .trim()
-            .escape(),
+        // check('name')
+        //     .notEmpty().withMessage('name cannot empty')
+        //     .trim()
+        //     .escape(),
 
-        check('gender')
-            .notEmpty().withMessage('gender cannot empty')
-            .trim()
-            .escape(),
+        // check('gender')
+        //     .notEmpty().withMessage('gender cannot empty')
+        //     .trim()
+        //     .escape(),
 
-        check('birthdate')
-            .notEmpty().withMessage('birthdate cannot empty')
-            .trim()
-            .escape(),
+        // check('birthdate')
+        //     .notEmpty().withMessage('birthdate cannot empty')
+        //     .trim()
+        //     .escape(),
 
-        check('address')
-            .notEmpty().withMessage('address cannot empty')
-            .trim()
-            .escape(),
+        // check('address')
+        //     .notEmpty().withMessage('address cannot empty')
+        //     .trim()
+        //     .escape(),
     ]
     // RESPONSE AND CONDITION
     const users = [
@@ -156,6 +156,11 @@ const { check, validationResult } = require('express-validator')
         }
     ]
 
-module.exports = {product, order, users}
+    // const filesPayloadExists = (req, res, next) => {
+    //     if (!req.files) return res.status(400).json({ status: 'error', message: 'Missing files!' })
+    //     next()
+    // } 
+
+module.exports = { product, order, users }
 
 

@@ -50,14 +50,14 @@ const productController = {
             id: req.params.id,
             file: req.files
         }
+        console.log(request);
         return productModel.update(request)
             .then((result) => {
                 if (typeof result.oldImages != "undefined") {
                     for (let index = 0; index < result.oldImages.length; index++) {
                         console.log(result.oldImages[index].filename)
                         unlink(`public/uploads/images/${result.oldImages[index].filename}`, (err) => {
-                            // if (err) throw err;
-                            console.log(`successfully deleted ${result.oldImages[index].filename}`);
+                            console.log(`successfully deleted ${result.oldImages[index].filename}`)
                         });
                     }
                 }
